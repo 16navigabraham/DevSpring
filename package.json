@@ -1,0 +1,38 @@
+{
+  "name": "crowdfund",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "@privy-io/react-auth": "^2.17.3",
+    "ethers": "^6.15.0",
+    "privy": "^0.4.1",
+    "react-router-dom": "^7.6.3"
+  },
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "nodemon": "^3.1.10",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  },
+  "description": "Support builders onchain",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/16navigabraham/DevSpring.git"
+  },
+  "keywords": [
+    "builders",
+    "create",
+    "the",
+    "future"
+  ],
+  "author": "Abraham Adebanjo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/16navigabraham/DevSpring/issues"
+  },
+  "homepage": "https://github.com/16navigabraham/DevSpring#readme"
+}
