@@ -1,13 +1,17 @@
 'use client';
-import React from 'react';
+import Link from 'next/link';
+import HomeContent from '../components/Home';
 
-const Home = () => {
+export default function HomePage() {
   return (
-    <main className="p-8 text-center">
-      <h1 className="text-4xl font-bold text-primary">Welcome to DevSpring</h1>
-      <p className="mt-4 text-gray-600">Support and create campaigns for developers!</p>
-    </main>
+    <div className="p-6">
+      <header className="flex justify-between items-center bg-primary text-white p-4">
+        <h1 className="text-xl font-bold">Crowdfundme</h1>
+        <Link href="/create">
+          <a className="bg-white text-primary px-4 py-2 rounded">Create</a>
+        </Link>
+      </header>
+      <HomeContent />
+    </div>
   );
-};
-
-export default Home;
+}
