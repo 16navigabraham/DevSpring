@@ -1,63 +1,67 @@
-'use client';
-import { Dialog } from '@headlessui/react';
-import { useState } from 'react';
-import { ethers } from 'ethers';
-import { getWeb3Provider } from '../utils/provider';
+import React, { useState } from 'react';
+import { BrowserProvider, parseEther } from 'ethers';
 import CrowdfundABI from '../abi/Crowdfund.json';
- // Ensure correct ABI import
 
-export default function ContributeModal({ isOpen, onClose, campaign }) {
+const ContributeModal = ({ isOpen, onClose, campaign }) => {
   const [amount, setAmount] = useState('');
-  const [confirmed, setConfirmed] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [status, setStatus] = useState('');
 
   const contribute = async () => {
-    const provider = getWeb3Provider();
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(campaign.id, CrowdfundABI, signer);
-    const tx = await contract.contribute({
-      value: ethers.utils.parseEther(amount),
-    });
-    await tx.wait();
-    onClose();
+    if (!agreed || !amount) return;
+
+    try {
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(campaign.id, CrowdfundABI, signer);
+
+      const tx = await contract.contribute({ value: parseEther(amount) });
+      await tx.wait();
+
+      setStatus('✅ Contribution successful!');
+    } catch (err) {
+      console.error(err);
+      setStatus('❌ Contribution failed.');
+    }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <div className="fixed inset-0 bg-black bg-opacity-30" />
-      <Dialog.Panel className="fixed inset-y-1/4 left-1/4 right-1/4 bg-white p-6 rounded">
-        <Dialog.Title>Contribute to {campaign.title}</Dialog.Title>
-        <p>Raised: {campaign.balance} / {campaign.goal} ETH</p>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded shadow-lg p-6 max-w-md w-full">
+        <h2 className="text-lg font-bold mb-2">{campaign.title}</h2>
+        <p>Goal: {campaign.goal} ETH</p>
+        <p>Raised: {campaign.balance} ETH</p>
         <input
           type="number"
           value={amount}
           onChange={e => setAmount(e.target.value)}
           placeholder="Amount in ETH"
-          className="border p-2 w-full mt-2"
+          className="border w-full p-2 my-2"
         />
-        <label className="flex items-center mt-2">
+        <label className="flex items-center space-x-2 text-sm mb-4">
           <input
             type="checkbox"
-            checked={confirmed}
-            onChange={e => setConfirmed(e.target.checked)}
+            checked={agreed}
+            onChange={e => setAgreed(e.target.checked)}
           />
-          <span className="ml-2 text-sm">I confirm I've read the details.</span>
+          <span>I understand I’m contributing onchain</span>
         </label>
-        <button
-          disabled={!confirmed}
-          onClick={contribute}
-          className={`mt-4 w-full py-2 rounded ${
-            confirmed ? 'bg-primary text-white' : 'bg-gray-300'
-          }`}
-        >
-          Contribute
-        </button>
-        <button
-          onClick={onClose}
-          className="mt-2 w-full py-2 rounded bg-secondary text-white"
-        >
-          Back
-        </button>
-      </Dialog.Panel>
-    </Dialog>
+        <div className="flex justify-between">
+          <button className="bg-gray-300 px-4 py-2 rounded" onClick={onClose}>Cancel</button>
+          <button
+            disabled={!agreed || !amount}
+            className={`px-4 py-2 rounded ${agreed && amount ? 'bg-blue-500 text-white' : 'bg-gray-300 cursor-not-allowed'}`}
+            onClick={contribute}
+          >
+            Contribute
+          </button>
+        </div>
+        {status && <p className="text-sm mt-2">{status}</p>}
+      </div>
+    </div>
   );
-}
+};
+
+export default ContributeModal;

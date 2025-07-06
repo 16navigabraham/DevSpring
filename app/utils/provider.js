@@ -1,4 +1,10 @@
-import { ethers } from 'ethers';
-import { RPC_URL } from './constants';
-export const getProvider = () => new ethers.providers.JsonRpcProvider(RPC_URL);
-export const getWeb3Provider = () => new ethers.providers.Web3Provider(window.ethereum);
+import { JsonRpcProvider, BrowserProvider } from 'ethers';
+
+export const getProvider = () => {
+  return new JsonRpcProvider("https://mainnet.base.org"); // or your RPC URL
+};
+
+export const getWeb3Provider = () => {
+  if (!window.ethereum) throw new Error("No wallet found");
+  return new BrowserProvider(window.ethereum);
+};
