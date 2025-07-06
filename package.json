@@ -2,17 +2,26 @@
   "name": "crowdfund",
   "version": "1.0.0",
   "main": "app.js",
-  "dependencies": {
-    "@privy-io/react-auth": "^2.17.3",
-    "ethers": "^6.15.0",
-    "privy": "^0.4.1",
-    "react-router-dom": "^7.6.3"
-  },
   "scripts": {
-    "dev": "nodemon src/app.js",
-    "start": "node src/app.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@ensdomains/ensjs": "^4.0.2",
+    "@privy-io/react-auth": "^2.17.3",
+    "@vitejs/plugin-react": "^4.6.0",
+    "ethers": "^6.15.0",
+    "next": "^15.3.5",
+    "nodejs": "^0.0.0",
+    "privy": "^0.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.6.3",
+    "vite": "^7.0.2"
   },
   "devDependencies": {
+    "@types/react": "19.1.8",
     "autoprefixer": "^10.4.21",
     "nodemon": "^3.1.10",
     "postcss": "^8.5.6",
