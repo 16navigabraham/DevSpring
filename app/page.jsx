@@ -1,76 +1,65 @@
 'use client';
 import Link from 'next/link';
-import { usePrivy } from '@privy-io/react-auth';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion'; // Make sure framer-motion is installed
 
 export default function HomePage() {
-  const { login, authenticated } = usePrivy();
-  const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
-  const handleAction = async (path) => {
-    if (!authenticated) {
-      await login(); // Prompt Privy login
-    }
-    router.push(path);
-  };
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
-    <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-black/30 backdrop-blur-sm z-0" />
     <div
-      className="relative h-screen w-full bg-cover bg-center"
+      className="relative h-screen w-full bg-cover bg-center bg-gray-900"
       style={{ backgroundImage: "url('/crowdfund-bg.jpeg')" }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-60 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-black/30 backdrop-blur-sm z-0" />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col justify-center items-center h-full text-white px-4 text-center">
-        <h1 className="text-5xl md:text-6xl font-extrabold mb-4 animate-fade-in-up">
-          Support Onchain Builders
-        </h1>
-        <p className="text-lg md:text-xl max-w-2xl mb-8 animate-fade-in-up delay-100">
-          Discover and fund verified developers building the future on Base.
-        </p>
+      <div className="relative z-10 flex flex-col justify-center items-center h-full text-white text-center px-4">
+        {isMounted && (
+          <>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="text-4xl md:text-6xl font-extrabold mb-6 drop-shadow-lg"
+            >
+              Welcome to CrowdfundMe
+            </motion.h1>
 
-        <div className="flex flex-col md:flex-row gap-4 animate-fade-in-up delay-200">
-          <button
-            onClick={() => handleAction('/create')}
-            className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-md font-semibold shadow-lg transition-transform transform hover:scale-105"
-          >
-            Create a Campaign
-          </button>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.9 }}
+              transition={{ delay: 0.5, duration: 1 }}
+              className="text-lg md:text-xl mb-8 max-w-xl"
+            >
+              Create or support web3 crowdfunding campaigns by verified ENS developers on Base.
+            </motion.p>
 
-          <button
-            onClick={() => handleAction('/campaigns')}
-            className="px-6 py-3 bg-white text-teal-700 hover:bg-gray-100 rounded-md font-semibold shadow-lg transition-transform transform hover:scale-105"
-          >
-            Join Campaigns
-          </button>
-        </div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 1 }}
+              className="flex gap-4"
+            >
+              <Link href="/create">
+                <button className="bg-secondary hover:bg-secondary/80 text-white px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                  Create Campaign
+                </button>
+              </Link>
+              <Link href="/campaigns">
+                <button className="bg-white hover:bg-gray-200 text-primary px-6 py-3 rounded-lg shadow-lg transition duration-300 ease-in-out">
+                  Explore Campaigns
+                </button>
+              </Link>
+            </motion.div>
+          </>
+        )}
       </div>
-
-      {/* Animations */}
-      <style jsx>{`
-        @keyframes fade-in-up {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-in-up {
-          animation: fade-in-up 1s ease-out forwards;
-        }
-        .delay-100 {
-          animation-delay: 0.3s;
-        }
-        .delay-200 {
-          animation-delay: 0.6s;
-        }
-      `}</style>
     </div>
   );
 }
