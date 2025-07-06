@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.20;
 
-import "./crowdfund.sol"; // Your current contract
+import "./crowdfund.sol";
 
 interface ENS {
     function owner(bytes32 node) external view returns (address);
@@ -9,22 +9,16 @@ interface ENS {
 
 contract CrowdfundFactory {
     ENS public ens;
-    address public ensRegistry = 0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e; // Ethereum Mainnet ENS registry
-
     address[] public campaigns;
     mapping(address => bool) public isVerifiedDev;
 
-    constructor() {
-        ens = ENS(ensRegistry);
+    constructor(address _ensRegistry) {
+        ens = ENS(_ensRegistry); // ENS registry for Base or Ethereum
     }
 
     function namehash(string memory name) public pure returns (bytes32) {
-        bytes32 node;
-        assembly {
-            node := 0
-        }
-        // Simple `.eth` only, extend if needed
-        node = keccak256(abi.encodePacked(node, keccak256(abi.encodePacked("eth"))));
+        // Only supports .eth domains
+        bytes32 node = keccak256(abi.encodePacked(bytes32(0), keccak256(abi.encodePacked("eth"))));
         node = keccak256(abi.encodePacked(node, keccak256(abi.encodePacked(name))));
         return node;
     }
@@ -46,3 +40,4 @@ contract CrowdfundFactory {
         return campaigns;
     }
 }
+

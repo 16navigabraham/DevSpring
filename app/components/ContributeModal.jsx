@@ -3,7 +3,8 @@ import { Dialog } from '@headlessui/react';
 import { useState } from 'react';
 import { ethers } from 'ethers';
 import { getWeb3Provider } from '../utils/provider';
-import CrowdfundABI from '../abi/Crowdfund.json';  // Ensure correct ABI import
+import CrowdfundABI from '../abi/Crowdfund.json';
+ // Ensure correct ABI import
 
 export default function ContributeModal({ isOpen, onClose, campaign }) {
   const [amount, setAmount] = useState('');
