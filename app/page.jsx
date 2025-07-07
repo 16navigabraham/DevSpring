@@ -1,27 +1,36 @@
 'use client';
 import { usePrivy } from '@privy-io/react-auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function LandingPage() {
   const { login, authenticated, ready } = usePrivy();
   const router = useRouter();
-  const [redirectPath, setRedirectPath] = useState('');
+  const redirectRef = useRef(null); // No type annotation here
 
   useEffect(() => {
-    if (authenticated && redirectPath) {
-      router.push(redirectPath);
+    if (ready && authenticated && redirectRef.current) {
+      router.push(redirectRef.current);
+      redirectRef.current = null;
     }
-  }, [authenticated, redirectPath, router]);
+  }, [ready, authenticated, router]);
 
   const handleNavigation = (path) => {
     if (!authenticated) {
-      setRedirectPath(path);
-      login(); // Trigger Privy login
+      redirectRef.current = path;
+      login();
     } else {
       router.push(path);
     }
   };
+
+  if (!ready) {
+    return (
+      <div className="h-screen w-full bg-animated text-white flex items-center justify-center">
+        <div className="spinner" />
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen w-full bg-animated text-white flex flex-col justify-center items-center px-4 text-center">

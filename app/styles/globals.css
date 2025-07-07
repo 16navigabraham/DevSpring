@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Fade In Up */
 @layer utilities {
   @keyframes fade-in-up {
     0% {
@@ -23,10 +18,9 @@
     animation: fade-in-up 1.2s ease-out both;
   }
 
-  /* Spinner */
   .spinner {
     border: 4px solid rgba(255, 255, 255, 0.2);
-    border-top: 4px solid #ffffff;
+    border-top: 4px solid #fff;
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -34,15 +28,17 @@
   }
 
   @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
+    to {
       transform: rotate(360deg);
     }
   }
 
-  /* Wavy Background Animation */
+  .bg-animated {
+    background: linear-gradient(-45deg, #00897B, #004D40, #009688, #00695C);
+    background-size: 400% 400%;
+    animation: wavy-bg 15s ease infinite;
+  }
+
   @keyframes wavy-bg {
     0% {
       background-position: 0% 50%;
@@ -55,22 +51,6 @@
     }
   }
 
-  .bg-animated {
-    background: linear-gradient(-45deg, #00897B, #004D40, #009688, #00695C);
-    background-size: 400% 400%;
-    animation: wavy-bg 15s ease infinite;
-  }
-
-  /* Glassy card effect (optional) */
-  .glass-card {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-  }
-
-  /* Button Transitions */
   .btn {
     @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300;
   }
@@ -83,4 +63,3 @@
     @apply bg-black text-white hover:bg-gray-800;
   }
 }
-
